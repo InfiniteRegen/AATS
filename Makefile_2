@@ -1,0 +1,13 @@
+CC = arm-none-linux-gnueabi-gcc
+
+CAMERA_MODULE = camera/camera.o
+ARDUINO_MODULE = ArduinoConnection/ArduinoConnection.o
+MAINMODULE = main.o
+OBJS = $(COMMON_MODULE) $(MODE_MODULE) $(MAINMODULE)
+TARGET = main
+
+$(TARGET): $(OBJS)
+	$(CC) -o $(TARGET) $(OBJS) -lpthread
+
+clean :
+	rm -f $(OBJS) $(TARGET)

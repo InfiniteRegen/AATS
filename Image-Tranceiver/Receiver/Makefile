@@ -1,0 +1,12 @@
+CC = gcc
+
+SUBMODULE = AcceptTCPConnection.o CreateTCPServerSocket.o DieWithError.o HandleTCPClient.o
+MAINMODULE = main.o
+OBJS =  $(SUBMODULE) $(MAINMODULE)
+TARGET = main
+
+$(TARGET): $(OBJS)
+	$(CC) -o $(TARGET) $(OBJS) -lpthread -I/usr/include/mysql -L/usr/local/lib/mysql -lmysqlclient
+
+clean :
+	rm -f $(OBJS) $(TARGET)

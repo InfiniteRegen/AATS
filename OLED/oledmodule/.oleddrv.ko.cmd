@@ -1,0 +1,1 @@
+cmd_/root/MAIN_PROJECT/OLED/oledmodule/oleddrv.ko := arm-none-linux-gnueabi-ld -EL -r  -T /CNDI_CD/source/BSP/kernel/kernel/scripts/module-common.lds --build-id  -o /root/MAIN_PROJECT/OLED/oledmodule/oleddrv.ko /root/MAIN_PROJECT/OLED/oledmodule/oleddrv.o /root/MAIN_PROJECT/OLED/oledmodule/oleddrv.mod.o

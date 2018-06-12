@@ -1,0 +1,1 @@
+cmd_/root/MAIN_PROJECT/TLCD/tlcdmodule/tlcddrv.ko := arm-none-linux-gnueabi-ld -EL -r  -T /CNDI_CD/source/BSP/kernel/kernel/scripts/module-common.lds --build-id  -o /root/MAIN_PROJECT/TLCD/tlcdmodule/tlcddrv.ko /root/MAIN_PROJECT/TLCD/tlcdmodule/tlcddrv.o /root/MAIN_PROJECT/TLCD/tlcdmodule/tlcddrv.mod.o

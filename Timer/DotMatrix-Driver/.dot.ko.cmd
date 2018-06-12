@@ -1,0 +1,1 @@
+cmd_/root/MAIN_PROJECT/countingDown/dot/dot.ko := arm-none-linux-gnueabi-ld -EL -r  -T /CNDI_CD/source/BSP/kernel/kernel/scripts/module-common.lds --build-id  -o /root/MAIN_PROJECT/countingDown/dot/dot.ko /root/MAIN_PROJECT/countingDown/dot/dot.o /root/MAIN_PROJECT/countingDown/dot/dot.mod.o
