@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>{==:: AATS SECURITY SYSTEM ::==}</title>
+</head>
+
+<body>
+<center>
+<font size=20><b>** AATS ARCHIVE **</b></font>
+</center>
+
+<?php
+	define('NONE_CORRUPT', '921654');
+
+	$host = "127.0.0.1";
+	$account = "root";
+	$password = "12345";
+	$database = "sensor";
+
+	$connect = mysqli_connect($host, $account, $password, $database);
+	if(!$connect) {
+	        echo "<script>alert('Database: connection() error.');</script>";
+	}
+
+	$image_join = "select DIR, SIZE from captureTab";
+
+	$DIR_query = mysqli_query($connect, $image_join);
+
+	$index = 0;
+
+	while ($row = mysqli_fetch_array($DIR_query)) {
+		$dir_name[$index] = $row["DIR"];
+		$size_len[$index] = $row["SIZE"];
+		++$index;
+	}
+
+	$index = 0;
+	echo '====[ START OF LIST ]====<br>';
+	while ($dir_name[$index]) {
+		if ($size_len[$index] == NONE_CORRUPT) {
+			echo '<=DIRECTORY=>  '.$dir_name[$index];
+			echo '                 <=SIZE=> '.$size_len[$index];
+			echo '<a href="'.$dir_name[$index].'">Link to BMP</a><br>';
+		}
+		++$index;
+	}
+
+	echo '<br>====[ END OF LIST ]====';
+
+	mysqli_close($connect); 
+
+?>
+</body>
+</html>
