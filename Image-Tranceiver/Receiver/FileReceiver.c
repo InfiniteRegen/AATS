@@ -71,7 +71,8 @@ void ReceiveImage(int clntSocket)
     fclose(fp);
     close(clntSocket);
 
-	SaveRecvData();
+	SaveRecvData(recvBuf);
+    free(recvBuf);
 
     printf("[#Image] <%s>: RECEIVING DONE\n", fileName);
 

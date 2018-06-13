@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StructDef.h"
+#include "SQL-Handler/SQLHandler.h"
 
 #include <stdio.h>
 #include <stdlib.h>

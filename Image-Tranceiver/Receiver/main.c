@@ -54,7 +54,7 @@ void *ThreadMain(void *threadArgs)
     clntSock = ((struct ThreadArgs *) threadArgs) -> clntSock;
     free(threadArgs);
 
-    HandleTCPClient(clntSock);
+    ReceiveImage(clntSock);
 
     return (NULL);
 }

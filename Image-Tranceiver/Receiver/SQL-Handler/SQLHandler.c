@@ -1,4 +1,5 @@
 #include "SQLHandler.h"
+#include <mysql.h>
 
 static int sql_cnt;
 

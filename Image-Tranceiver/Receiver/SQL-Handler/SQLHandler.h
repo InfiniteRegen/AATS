@@ -17,3 +17,6 @@
 #define MYSQL_REMOTE_PORT 	3306
 #define MYSQL_TABLE_NAME	"captureTab"
 #define MYSQL_DB_NAME		"sensor"
+
+void InitSQL();
+void SaveRecvData(recv_t *recvBuf);
