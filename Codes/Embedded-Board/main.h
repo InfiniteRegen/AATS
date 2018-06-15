@@ -25,7 +25,7 @@
 
 /* Network Modules */
 void *ArduinoHandler(void *param);
-void *AndroidHandler(void *param)
+void *AndroidHandler(void *param);
 void *SendImage(void *param);
 
 /* Embedded Modules */

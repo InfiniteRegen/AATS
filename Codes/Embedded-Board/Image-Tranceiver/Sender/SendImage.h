@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../main.h"
+#include "../../main.h"
 #include "StructDef.h"
 
 #include <sys/socket.h>

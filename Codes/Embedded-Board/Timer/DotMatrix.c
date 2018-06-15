@@ -14,7 +14,7 @@
 
 void *DoCountingDown(void *param)
 {
-	threadCount_t *input = param;
+	dotMatrixHandler_t *input = param;
 
 	while (TRUE) {
 		(input->countNum)--;
@@ -54,7 +54,7 @@ void *DotMatrixHandler(void* param)
 	int Left = 0, Right = 0; // Left == LCD_1, Right == LCD_2
 
 	unsigned short wData[2];
-	threadCount_t *input = param;
+	dotMatrixHandler_t *input = param;
 
 	pthread_detach(pthread_self());
 

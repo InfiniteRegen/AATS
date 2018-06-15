@@ -1,6 +1,3 @@
-#include "videodev2.h"
-#include "SecBuffer.h"
-#include "bitmap.h" // Additional Header for BMP Files
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,6 +12,10 @@
 #include <linux/fb.h>
 #include <linux/videodev2.h>
 #include <time.h> // time functio // time functionn
+
+#include "videodev2.h"
+#include "SecBuffer.h"
+#include "bitmap.h" // Additional Header for BMP Files
 
 #define BIT_VALUE_24BIT   24
 

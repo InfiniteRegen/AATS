@@ -3,7 +3,7 @@
 CC = arm-none-linux-gnueabi-gcc
 
 NETWORK_MODULE = ArduinoHandler.o AndroidSignalHandler.o SendImage.o
-EMBEDDED_MODULE = camera.o DotMatrix.o TouchHandler.o background.o OLED.o color.o busled.o TLCD.o
+EMBEDDED_MODULE = Camera.o DotMatrix.o TouchHandler.o BackgroundImageHandler.o OLED.o ColorLED.o BusLED.o TLCD.o
 MAIN_MODULE = main.o
 OBJS = $(MAIN_MODULE) $(EMBEDDED_MODULE) $(NETWORK_MODULE)
 TARGET = main
@@ -17,8 +17,8 @@ main.o: main.c
 ArduinoHandler.o: ./Arduino-SerialCommunication-Handler/ArduinoHandler.c
 	$(CC) -c ./Arduino-SerialCommunication-Handler/ArduinoHandler.c -lpthread
 
-AndroidSignalHandler.o: ./Android-Signal-Handler/SignalHandler.c
-	$(CC) -c ./Android-Signal-Handler/SignalHandler.c -lpthread
+AndroidSignalHandler.o: ./Android-Signal-Handler/AndroidSignalHandler.c
+	$(CC) -c ./Android-Signal-Handler/AndroidSignalHandler.c -lpthread
 
 Camera.o: ./Camera/Camera.c
 	$(CC) -c ./Camera/Camera.c -lpthread
@@ -32,7 +32,7 @@ DotMatrix.o: ./Timer/DotMatrix.c
 TouchHandler.o: ./TouchHandler/TouchHandler.c
 	$(CC) -c ./TouchHandler/TouchHandler.c -lpthread
 
-Background.o: ./BackgroundImage/BackgroundImageHandler.c
+BackgroundImageHandler.o: ./BackgroundImage/BackgroundImageHandler.c
 	$(CC) -c ./BackgroundImage/BackgroundImageHandler.c -lpthread
 
 OLED.o: ./OLED/OLED.c
@@ -48,7 +48,7 @@ TLCD.o: ./TLCD/TLCD.c
 	$(CC) -c ./TLCD/TLCD.c
 
 clean:
-	rm -rf *.o main
+	rm -rf *.o $(TARGET) 
 
 clear:
-	rm -rf *.o main
+	rm -rf *.o $(TARGET) 
