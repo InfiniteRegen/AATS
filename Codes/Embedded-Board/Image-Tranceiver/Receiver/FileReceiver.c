@@ -11,7 +11,6 @@ void ReceiveImage(int clntSocket)
     char fileName[100];
     char temp[20];
 
-    char dbFileName[255];
     int bufSize;
     int recvSizeT;
 
@@ -34,11 +33,6 @@ void ReceiveImage(int clntSocket)
 	*/
 
     sprintf(fileName, "%s%s%s%s_%s_%s_%s%s", STORAGE_PATH,
-			recvBuf->year, recvBuf->mon, recvBuf->day,
-		    recvBuf->hour, recvBuf->min, recvBuf->sec,
-			IMAGE_EXTENSION);
-
-    sprintf(dbFileName, "%s%s%s%s_%s_%s_%s%s", WEBPHP_PATH,
 			recvBuf->year, recvBuf->mon, recvBuf->day,
 		    recvBuf->hour, recvBuf->min, recvBuf->sec,
 			IMAGE_EXTENSION);
@@ -71,7 +65,7 @@ void ReceiveImage(int clntSocket)
     fclose(fp);
     close(clntSocket);
 
-	SaveRecvData(recvBuf);
+	SaveRecvData(recvBuf, totalRecv);
     free(recvBuf);
 
     printf("[#Image] <%s>: RECEIVING DONE\n", fileName);

@@ -11,7 +11,7 @@
 
 #include "../main.h"
 
-void DisplayColor(short mode)
+void DisplayColorLED(short mode)
 {
 	static int fd_color = 0;
 	unsigned short wColor[3];

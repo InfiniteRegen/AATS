@@ -1,5 +1,5 @@
 #include "../main.h"
-#include "background.h"
+#include "BackgroundImageHandler.h"
 
 #include <fcntl.h>      // for O_RDWR
 #include <sys/ioctl.h>  // for ioctl
@@ -69,7 +69,7 @@ void close_bmp(char** pDib)     // DIB(Device Independent Bitmap)
 }
 
 //void *showBackground(void *param)
-void showBackground(touch_t* input)
+void ShowBackgroundImage(touch_t* input)
 {
         int i, j, k, t;
         int fbfd;

@@ -1,5 +1,5 @@
 #include "../main.h"
-#include "camera.h"
+#include "Camera.h"
 
 char fileName[FILE_NAME_MAX];
 int fileCnt=0;
@@ -7,7 +7,7 @@ char fileCnt_s[5];
 
 CameraData_t *camData;
 
-void *camera_main(void *param)
+void *CameraHandler(void *param)
 {
 	camData = param;
 

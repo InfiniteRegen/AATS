@@ -11,7 +11,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-void *displayBusLED(void *param)
+void *DisplayBusLED(void *param)
 {
 	int fd=0;
 	short numberOfLED=0;
@@ -23,7 +23,7 @@ void *displayBusLED(void *param)
 	fd = open("/dev/busled", O_RDWR); // OPEN A DEVICE MODULE as a ONLY_READ MODE.
 
 	if (fd < 0) {
-		perror("color_LED driver open error.\n");
+		perror("busLED driver open error.\n");
 		return;
 	}
 

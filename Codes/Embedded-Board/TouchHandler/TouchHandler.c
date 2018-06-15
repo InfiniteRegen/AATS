@@ -6,7 +6,7 @@
 #include <string.h>
 #include <linux/input.h>
 #include <linux/fb.h>
-#include <linux/fb.h>   // for fb_var_screeninfo, FBIOGET_VSCREENINFO
+#include <linux/fb.h>
 
 #define	 FBDEV_FILE 		"/dev/fb0"
 #define  INPUT_DEVICE_LIST	"/proc/bus/input/devices"
@@ -93,7 +93,7 @@ void drawCoordinate(unsigned char *fb_mem, int cx , int cy, int preX, int preY)
 }
 
 
-void *threadTouch(void *param)
+void *TabletTouchHandler(void *param)
 {
 	char eventFullPathName[100];
 	int	eventnum;

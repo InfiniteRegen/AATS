@@ -16,3 +16,4 @@
 #define STORAGE_PATH "./captured/"
 
 void *SendImage(void *param);
+void Formatting(send_t *sendBuf, eventInfo_t *data);

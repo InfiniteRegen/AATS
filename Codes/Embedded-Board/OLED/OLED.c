@@ -349,7 +349,7 @@ int Init_OLED(void)
 #define MODE_IMAGE		4
 #define MODE_INIT		5
 
-void displayOLED(char *fileName)
+void DisplayOLED(char *fileName)
 {
 	imageLoading(fileName);
 

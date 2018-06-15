@@ -272,7 +272,7 @@ void doHelp(void)
 #define CMD_CURSOR_POS		1
 #define CMD_CEAR_SCREEN		2
 
-void displayTLCD(int mode)
+void DisplayTLCD(int mode)
 {
 	int nCmdMode;
 	int bCursorOn, bBlink, nline, nColumn;

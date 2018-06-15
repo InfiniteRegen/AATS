@@ -1,4 +1,4 @@
-#include "Sender.h"
+#include "SendImage.h"
 
 void *SendImage(void *param)
 {
@@ -22,17 +22,9 @@ void *SendImage(void *param)
 
 	pthread_detach(pthread_self());
 
-	eventInfo_t *data = param;
+	eventInfo_t *data = (eventInfo_t *)param;
 
-	/* Formatting */
-	sprintf(sendBuf.sensorNum, "%d", data->sensorNum);
-	sprintf(sendBuf.distance, "%05d", data->distance);
-	sprintf(sendBuf.year, "%04d", data->cur_time->tm_year + 1900);
-	sprintf(sendBuf.mon, "%02d", data->cur_time->tm_mon + 1);
-	sprintf(sendBuf.day, "%02d", data->cur_time->tm_mday);
-	sprintf(sendBuf.hour, "%02d", data->cur_time->tm_hour);
-	sprintf(sendBuf.min, "%02d", data->cur_time->tm_min);
-	sprintf(sendBuf.sec, "%02d", data->cur_time->tm_sec);
+	Formatting(&sendBuf, data);
 	strcpy(fileName, data->fileName);
 
 	free(param);
@@ -103,6 +95,21 @@ void *SendImage(void *param)
 
 	printf("<%s>----> [TRANSFER ACCOMPLISHED]!!\n", fileName);
 	close(sock);
+
+	return;
+}
+
+
+void Formatting(send_t *sendBuf, eventInfo_t *data)
+{
+	sprintf(sendBuf->sensorNum, "%d", data->sensorNum);
+	sprintf(sendBuf->distance, "%05d", data->distance);
+	sprintf(sendBuf->year, "%04d", data->cur_time->tm_year + 1900);
+	sprintf(sendBuf->mon, "%02d", data->cur_time->tm_mon + 1);
+	sprintf(sendBuf->day, "%02d", data->cur_time->tm_mday);
+	sprintf(sendBuf->hour, "%02d", data->cur_time->tm_hour);
+	sprintf(sendBuf->min, "%02d", data->cur_time->tm_min);
+	sprintf(sendBuf->sec, "%02d", data->cur_time->tm_sec);
 
 	return;
 }

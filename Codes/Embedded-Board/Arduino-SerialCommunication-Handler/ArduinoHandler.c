@@ -2,33 +2,17 @@
 
 #define MAX_BUF 30
 
+void *WriteSerialData(void *param);
+
 volatile int STOP = FALSE;
 int fd;
 
-void* writeSerialData(void *param)
-{
-	char buf_2[5];
-
-	pthread_detach(pthread_self());
-
-	while (TRUE) {
-		if (FIREFLAG == 1) {
-			memset(buf_2, 10, sizeof(buf_2));
-			printf("[#SERIAL] Write Complished..\n");
-			write(fd, buf_2, (int)strlen(buf_2));
-			FIREFLAG = 0;
-		}
-		sleep(1);
-	}
-}
-
-void* ArduinoConnection(void *param)
+void *ArduinoHandler(void *param)
 {
 	static char buf[MAX_BUF];
 	static char buf_2[MAX_BUF];
 	int c, res;
-	struct termios oldtio,newtio;
-	int iter=0;
+	struct termios oldtio, newtio;
 	char *token;
 	pthread_t serial;
 
@@ -59,7 +43,7 @@ void* ArduinoConnection(void *param)
 	tcsetattr(fd, TCSANOW, &newtio);
 
 	printf("####### #######################\n");
-	//pthread_create(&serial, NULL, writeSerialData, NULL);
+	//pthread_create(&serial, NULL, WriteSerialData, NULL);
 
 	while (STOP == FALSE) { /* loop for input */
 		memset(buf, 0x00, sizeof(buf));
@@ -79,4 +63,21 @@ void* ArduinoConnection(void *param)
 	LOOP_SET_1 = 1;
 
 	return;
+}
+
+void *WriteSerialData(void *param)
+{
+	char buf_2[5];
+
+	pthread_detach(pthread_self());
+
+	while (TRUE) {
+		if (FIREFLAG == 1) {
+			memset(buf_2, 10, sizeof(buf_2));
+			printf("[#SERIAL] Write Complished..\n");
+			write(fd, buf_2, (int)strlen(buf_2));
+			FIREFLAG = 0;
+		}
+		sleep(1);
+	}
 }

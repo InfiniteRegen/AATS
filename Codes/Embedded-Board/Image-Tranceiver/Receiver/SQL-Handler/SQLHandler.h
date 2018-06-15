@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,4 +21,4 @@
 #define MYSQL_DB_NAME		"sensor"
 
 void InitSQL();
-void SaveRecvData(recv_t *recvBuf);
+void SaveRecvData(recv_t *recvBuf, long int totalRecv);

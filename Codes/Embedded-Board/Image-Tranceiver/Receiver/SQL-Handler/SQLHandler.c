@@ -1,5 +1,4 @@
 #include "SQLHandler.h"
-#include <mysql.h>
 
 static int sql_cnt;
 
@@ -9,6 +8,7 @@ MYSQL_ROW	row;
 
 void InitSQL()
 {
+    char query[255];
     mysql_init(&mysql);
 
     if (!(connection = mysql_real_connect(&mysql, NULL, MYSQL_ID, MYSQL_PASSWD, NULL, MYSQL_REMOTE_PORT, (char *)NULL, 0))) {
@@ -25,10 +25,17 @@ void InitSQL()
     return;
 }
 
-void SaveRecvData(recv_t *recvBuf)
+void SaveRecvData(recv_t *recvBuf, long int totalRecv)
 {
     char query[255];
+    char dbFileName[255];
     int queryStatus;
+
+    sprintf(dbFileName, "%s%s%s%s_%s_%s_%s%s", WEBPHP_PATH,
+            recvBuf->year, recvBuf->mon, recvBuf->day,
+            recvBuf->hour, recvBuf->min, recvBuf->sec,
+            IMAGE_EXTENSION);
+
     sprintf(query, "insert into %s values (%d, '%s', '%s', '%s%s%s_%s:%s:%s', '%s', %09ld)",
             MYSQL_TABLE_NAME, sql_cnt++,
             recvBuf->sensorNum, recvBuf->distance,

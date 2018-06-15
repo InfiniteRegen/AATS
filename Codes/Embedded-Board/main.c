@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 	eventInfo_t *sockSend;
 
 	pthread_t countThread;
-	threadCount_t *countParam;
+	dotMatrixHandler_t *countParam;
 
 	pthread_t secInfoThread;
 
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 	MAXSOCKTHREAD = 5;
 
 	touchParam = (touch_t *)malloc(sizeof(touch_t));
-	threadRet = pthread_create(&touchThread, NULL, threadTouch, touchParam);
+	threadRet = pthread_create(&touchThread, NULL, TabletTouchHandler, touchParam);
 
 	if (threadRet < 0) {
 		printf("Failed to create Touch Thread!!\n");
@@ -64,30 +64,30 @@ int main(int argc, char** argv)
 	}
 
 	/* INIT Background Image */
-	showBackground(touchParam);
-	DisplayColor(RGB_GREEN); // display GREEN
+	ShowBackgroundImage(touchParam);
+	DisplayColorLED(RGB_GREEN); // display GREEN
 
 	/* Arduino <-[data]-> Embedded Board */
 	sensorData = (ArduCon_t *)malloc(sizeof(ArduCon_t));
-	threadRet = pthread_create(&ArduConThread, NULL, ArduinoConnection, sensorData); // Arduino Connection Thread.
+	threadRet = pthread_create(&ArduConThread, NULL, ArduinoHandler, sensorData); // Arduino Connection Thread.
 	if (threadRet < 0) {
-		printf("Failed to create ArduinoConnection Thread!!\n");
+		printf("Failed to create ArduinoHandler Thread!!\n");
 		exit(-1);
 	}
 
 	/* Real-time security camera */
 	camData = (CameraData_t *)malloc(sizeof(CameraData_t));
-	threadRet = pthread_create(&CameraThread, NULL, camera_main, camData);
+	threadRet = pthread_create(&CameraThread, NULL, CameraHandler, camData);
 	if (threadRet < 0) {
 		printf("Failed to create Camera Thread!!\n");
 		exit(-1);
 	}
 
 	/* Init counter & Set it 11 seconds */
-	countParam = (threadCount_t *)malloc(sizeof(threadCount_t));
+	countParam = (dotMatrixHandler_t *)malloc(sizeof(dotMatrixHandler_t));
 	countParam->countNum = 11; // sec
 
-	threadRet = pthread_create(&AndroidThread, NULL, AndroidSignal, NULL);
+	threadRet = pthread_create(&AndroidThread, NULL, AndroidHandler, NULL);
 	if (threadRet < 0) {
 		printf("Failed to create Touch Thread!!\n");
 		exit(-1);
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
 
 	/* Init BusLED */
 	busParam = (bus_t *)malloc(sizeof(bus_t));
-	threadRet = pthread_create(&busThread, NULL, displayBusLED, busParam);
+	threadRet = pthread_create(&busThread, NULL, DisplayBusLED, busParam);
 	if (threadRet < 0) {
 		printf("Failed to create busLED !!\n");
 		exit(-1);
@@ -105,28 +105,28 @@ int main(int argc, char** argv)
 	while (TRUE) {
 
 		if (KILLSIG == 1) { /* POWER OFF SIG from ANDROID */
-			displayOLED(OLED_INIT_PATH);
-			DisplayColor(RGB_INIT);
+			DisplayOLED(OLED_INIT_PATH);
+			DisplayColorLED(RGB_INIT);
 			usleep(10);
 			break;
 		}
 
 		/* OLED HANDLING */
 		if (touchParam->supBut == TRUE) {
-			displayOLED(OLED_SUPRESSION_PATH);
+			DisplayOLED(OLED_SUPRESSION_PATH);
 			touchParam->supBut = 0;
 		}
 		else if (touchParam->thBut == TRUE) {
-			displayOLED(OLED_THREAT_PATH);
+			DisplayOLED(OLED_THREAT_PATH);
 			touchParam->thBut = 0;
 		}
 
-		DisplayColor(RGB_GREEN); /* display GREEN */
+		DisplayColorLED(RGB_GREEN); /* display GREEN */
 
 		if (sensorData->avail == TRUE ) {
 
 			sensorData->avail = 0;
-			displayTLCD(1);
+			DisplayTLCD(1);
 			printf("Sensor Num: %d <==> Distance: %d\n", sensorData->sensorNum, sensorData->distance);
 			busParam->distance = sensorData->sensorNum;
 			countParam->distance = sensorData->distance;
@@ -158,16 +158,16 @@ int main(int argc, char** argv)
 
 				countParam->countNum = 11;
 				countParam->countFlag = 1;
-				threadRet = pthread_create(&countThread, NULL, threadCount, countParam);
+				threadRet = pthread_create(&countThread, NULL, DotMatrixHandler, countParam);
 
 				if (threadRet < 0) {
 					printf("Failed to create thread: CountThread()\n");
 					exit(-1);
 				}
 
-				threadRet = pthread_create(&secInfoThread, NULL, CheckTime, countParam);
+				threadRet = pthread_create(&secInfoThread, NULL, DoCountingDown, countParam);
 				if (threadRet < 0) {
-					printf("Failed to create thread: CheckTime()\n");
+					printf("Failed to create thread: DoCountingDown()\n");
 					exit(-1);
 				}
 

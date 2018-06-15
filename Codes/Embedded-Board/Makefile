@@ -1,41 +1,51 @@
-main:	main.o ArduinoConnection.o camera.o SendBMP.o count.o touchapp.o background.o OLED.o color.o server.o busled.o TLCD.o
-	arm-none-linux-gnueabi-gcc -o main main.o ArduinoConnection.o camera.o SendBMP.o count.o touchapp.o background.o OLED.o color.o server.o busled.o TLCD.o -lpthread
+#################### AATS's makefile ####################
+
+CC = arm-none-linux-gnueabi-gcc
+
+NETWORK_MODULE = ArduinoHandler.o AndroidSignalHandler.o SendImage.o
+EMBEDDED_MODULE = camera.o DotMatrix.o TouchHandler.o background.o OLED.o color.o busled.o TLCD.o
+MAIN_MODULE = main.o
+OBJS = $(MAIN_MODULE) $(EMBEDDED_MODULE) $(NETWORK_MODULE)
+TARGET = main
+
+main: $(OBJS)
+	$(CC) -o $(TARGET) $(OBJS) -lpthread
 
 main.o: main.c
-	arm-none-linux-gnueabi-gcc -c main.c -lpthread
+	$(CC) -c main.c -lpthread
 
-ArduinoConnection.o: ./ArduinoConnection/ArduinoConnection.c
-	arm-none-linux-gnueabi-gcc -c ./ArduinoConnection/ArduinoConnection.c -lpthread
+ArduinoHandler.o: ./Arduino-SerialCommunication-Handler/ArduinoHandler.c
+	$(CC) -c ./Arduino-SerialCommunication-Handler/ArduinoHandler.c -lpthread
 
-camera.o: ./camera/camera.c
-	arm-none-linux-gnueabi-gcc -c ./camera/camera.c -lpthread
+AndroidSignalHandler.o: ./Android-Signal-Handler/SignalHandler.c
+	$(CC) -c ./Android-Signal-Handler/SignalHandler.c -lpthread
 
-SendBMP.o: ./Socket/SendBMP.c
-	arm-none-linux-gnueabi-gcc -c ./Socket/SendBMP.c -lpthread
+Camera.o: ./Camera/Camera.c
+	$(CC) -c ./Camera/Camera.c -lpthread
 
-count.o: ./countingDown/count.c
-	arm-none-linux-gnueabi-gcc -c ./countingDown/count.c -lpthread
+SendImage.o: ./Image-Tranceiver/Sender/SendImage.c
+	$(CC) -c ./Image-Tranceiver/Sender/SendImage.c -lpthread
 
-touchapp.o: ./touchapp/touchapp.c
-	arm-none-linux-gnueabi-gcc -c ./touchapp/touchapp.c -lpthread
+DotMatrix.o: ./Timer/DotMatrix.c
+	$(CC) -c ./Timer/DotMatrix.c -lpthread
 
-background.o: ./background/background.c
-	arm-none-linux-gnueabi-gcc -c ./background/background.c -lpthread
+TouchHandler.o: ./TouchHandler/TouchHandler.c
+	$(CC) -c ./TouchHandler/TouchHandler.c -lpthread
+
+Background.o: ./BackgroundImage/BackgroundImageHandler.c
+	$(CC) -c ./BackgroundImage/BackgroundImageHandler.c -lpthread
 
 OLED.o: ./OLED/OLED.c
-	arm-none-linux-gnueabi-gcc -c ./OLED/OLED.c -lpthread
+	$(CC) -c ./OLED/OLED.c -lpthread
 
-color.o: ./color/color.c
-	arm-none-linux-gnueabi-gcc -c ./color/color.c
+ColorLED.o: ./ColorLED/ColorLED.c
+	$(CC) -c ./ColorLED/ColorLED.c
 
-server.o: ./AND_CON/server.c
-	arm-none-linux-gnueabi-gcc -c ./AND_CON/server.c -lpthread
+BusLED.o: ./BusLED/BusLED.c
+	$(CC) -c ./BusLED/BusLED.c -lpthread
 
-busled.o: ./BUSLED/busled.o
-	arm-none-linux-gnueabi-gcc -c ./BUSLED/busled.c -lpthread
-
-TLCD.o: ./TLCD/TLCD.o
-	arm-none-linux-gnueabi-gcc -c ./TLCD/TLCD.c
+TLCD.o: ./TLCD/TLCD.c
+	$(CC) -c ./TLCD/TLCD.c
 
 clean:
 	rm -rf *.o main

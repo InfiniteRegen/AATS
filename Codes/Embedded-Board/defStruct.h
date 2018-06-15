@@ -27,11 +27,11 @@ typedef struct eventSend {
 	unsigned short	distance;
 } eventInfo_t;
 
-typedef struct countingTen {
+typedef struct dotMatrixHandler {
 	short countNum;
 	short countFlag;
 	short distance;
-} threadCount_t;
+} dotMatrixHandler_t;
 
 typedef struct touchInfo {
 	short thBut; /* Threat Button */

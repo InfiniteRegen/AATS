@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <time.h>
 
-void *CheckTime(void *param)
+void *DoCountingDown(void *param)
 {
 	threadCount_t *input = param;
 
@@ -47,7 +47,7 @@ unsigned short HEART_MAP[2][5] = {
 	{0xfe7c, 0xfd3e, 0xfb1f, 0xf70f, 0xef00}, // Light_Heart
 };
 
-void *threadCount(void* param)
+void *DotMatrixHandler(void* param)
 {
 	int fd_dot=0, fd_dip=0;
 	int index = 0;
@@ -66,7 +66,7 @@ void *threadCount(void* param)
 		return;
 	}
 
-	DisplayColor(RGB_RED);
+	DisplayColorLED(RGB_RED);
 	while (TRUE) {
 
 		if (input->distance <= 8) {
@@ -91,7 +91,7 @@ void *threadCount(void* param)
 			memset(wData, 0x00, sizeof(wData));
 			while (!input->countFlag)
 				sleep(1);
-			DisplayColor(RGB_BLUE);
+			DisplayColorLED(RGB_BLUE);
 		}
 	}
 	close(fd_dot);
