@@ -16,3 +16,8 @@ void DieWithError(char *errorMessage);
 int CreateTCPServerSocket(unsigned short port);
 int AcceptTCPConnection(int servSock);
 void ReceiveImage(int clntSocket);
+void *ThreadMain(void *arg);
+
+struct ThreadArgs {
+    int clntSock;
+};

@@ -2,7 +2,7 @@
 #include "Camera.h"
 
 char fileName[FILE_NAME_MAX];
-int fileCnt=0;
+int fileCnt = 0;
 char fileCnt_s[5];
 
 CameraData_t *camData;
@@ -196,9 +196,7 @@ void write_bmp(char *filename)
 	headers[11] = 0;             // biClrUsed
 	headers[12] = 0;             // biClrImportant
 
-	strcpy(pathToSave, "./captured/");
-	strcat(pathToSave, filename);
-	strcat(pathToSave, ".bmp");
+	sprintf(pathToSave, "%s%s%s", "./captured/", filename, ".bmp");
 
 	outfile_index = (outfile_index + 1) % 5;
 	outfile[outfile_index] = fopen(pathToSave, "wb");

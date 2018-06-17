@@ -1,8 +1,8 @@
 #include "main.h"
 
-#define OLED_INIT_PATH 		 "./OLED/init.img"
-#define OLED_SUPRESSION_PATH "./OLED/sup.img"
-#define OLED_THREAT_PATH 	 "./OLED/threat.img"
+#define OLED_INIT_PATH			"./OLED/init.img"
+#define OLED_SUPRESSION_PATH	"./OLED/sup.img"
+#define OLED_THREAT_PATH		"./OLED/threat.img"
 
 int main(int argc, char** argv)
 {

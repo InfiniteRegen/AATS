@@ -147,8 +147,6 @@ int writeData(int size, unsigned char* dataArr)
 
 		wdata = CS_BIT_MASK & ((unsigned char)dataArr[i] | 0xFF00);
 		write(OLEDFD, &wdata, 2);
-
-
 	}
 
 	wdata = DEFAULT_MASK;

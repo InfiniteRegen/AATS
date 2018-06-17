@@ -20,10 +20,10 @@ void read_bmp(char* filename, char** pDib, char** data, int* cols, int* rows)
         int nread;
         FILE *fp;
 
-        fp  =  fopen(filename, "rb");
+        fp = fopen(filename, "rb");
         if (fp == NULL) {
-                printf("ERROR\n");
-                return;
+            printf("ERROR\n");
+            return;
         }
 
         // identify bmp file
@@ -32,9 +32,9 @@ void read_bmp(char* filename, char** pDib, char** data, int* cols, int* rows)
         printf("magicNum : %c%c\n", magicNum[0], magicNum[1]);
 
         if (magicNum[0] != 'B' && magicNum[1] != 'M') {
-                printf("It's not a bmp file!\n");
-                fclose(fp);
-                return;
+            printf("It's not a bmp file!\n");
+            fclose(fp);
+            return;
         }
 
         nread   =   fread(&bmpHeader.bfSize, 1, sizeof(BITMAPFILEHEADER), fp);
@@ -48,9 +48,9 @@ void read_bmp(char* filename, char** pDib, char** data, int* cols, int* rows)
 
         // check 24bit
         if (BIT_VALUE_24BIT != (bmpInfoHeader->biBitCount)) { // bit value
-                printf("It supports only 24bit bmp!\n");
-                fclose(fp);
-                return;
+            printf("It supports only 24bit bmp!\n");
+            fclose(fp);
+            return;
         }
 
         *cols   =   bmpInfoHeader->biWidth;
@@ -96,17 +96,17 @@ void ShowBackgroundImage(touch_t* input)
         printf("[#BackGround] columns = %d, rows = %d\n", cols, rows);
 
         for (j = 0; j < rows; j++) {
-                k = j * cols * 3;
-                t = (rows - 1 - j) * cols;
+            k = j * cols * 3;
+            t = (rows - 1 - j) * cols;
 
-                for (i = 0; i < cols; i++) {
-                        b = *(data + (k + i * 3));
-                        g = *(data + (k + i * 3 + 1));
-                        r = *(data + (k + i * 3 + 2));
+            for (i = 0; i < cols; i++) {
+                b = *(data + (k + i * 3));
+                g = *(data + (k + i * 3 + 1));
+                r = *(data + (k + i * 3 + 2));
 
-                        pixel = ((r<<16) | (g<<8) | b);
-                        bmpdata[t + i] = pixel; // save bitmap data bottom up
-                }
+                pixel = ((r<<16) | (g<<8) | b);
+                bmpdata[t + i] = pixel; // save bitmap data bottom up
+            }
         }
 
         close_bmp(&pData);
@@ -140,54 +140,54 @@ void ShowBackgroundImage(touch_t* input)
         pfbmap = (unsigned char *)mmap(0, mem_size, PROT_READ|PROT_WRITE, MAP_SHARED, fbfd, 0);
 
         if ((unsigned)pfbmap == (unsigned)-1) {
-                perror("fbdev mmap\n");
-                exit(1);
+            perror("fbdev mmap\n");
+            exit(1);
         }
 
         // fb clear - black
         for (coor_y = 0; coor_y < screen_height; coor_y++) {
-                ptr = (unsigned long *)pfbmap + (screen_width * coor_y);
+            ptr = (unsigned long *)pfbmap + (screen_width * coor_y);
 
-                for (coor_x = 0; coor_x < screen_width; coor_x++) {
-                        *ptr++ = 0x000000;
-                }
+            for (coor_x = 0; coor_x < screen_width; coor_x++) {
+                *ptr++ = 0x000000;
+            }
         }
 
         // direction for image generating : (0,0)-> (1,0)-> (2,0)-> ...-> (row, column)
         while (TRUE) {
+            for (coor_y = 0; coor_y < rows; coor_y++) {
+                ptr = (unsigned long*)pfbmap + (screen_width * coor_y);
+                for (coor_x = 0; coor_x < cols; coor_x++) {
+                    *ptr++ = bmpdata[coor_x + (coor_y * cols)];
+                }
+            }
+
+            if (input->thBut == 1) {
+                printf("[#BACKGROUND] THREAT: [ON]\n");
+                input->modeFlag = 1;
+                break;
+            }
+            else if (input->supBut == 1) {
+                printf("[#BACKGROUND] SUPRESSION: [ON]\n");
+                input->modeFlag = 1;
+                break;
+            }
+            else if (input->haltBut == 1) {
+                printf("[#BACKGROUND] HALT: [ON]\n");
+                printf("**************************************\n");
+                printf("*********[ THE AATS IS SHUTTING DOWN ]*********\n");
+                printf("**************************************\n");
+
                 for (coor_y = 0; coor_y < rows; coor_y++) {
-                        ptr = (unsigned long*)pfbmap + (screen_width * coor_y);
-                        for (coor_x = 0; coor_x < cols; coor_x++) {
-                                *ptr++ = bmpdata[coor_x + (coor_y * cols)];
-                        }
+                    ptr = (unsigned long*)pfbmap + (screen_width * coor_y);
+                    for (coor_x = 0; coor_x < cols; coor_x++)
+                        *ptr++ = 0x0000000;
                 }
 
-                if (input->thBut == 1) {
-                        printf("[#BACKGROUND] THREAT: [ON]\n");
-                        input->modeFlag = 1;
-                        break;
-                }
-                else if (input->supBut == 1) {
-                        printf("[#BACKGROUND] SUPRESSION: [ON]\n");
-                        input->modeFlag = 1;
-                        break;
-                }
-                else if (input->haltBut == 1) {
-                        printf("[#BACKGROUND] HALT: [ON]\n");
-                        printf("**************************************\n");
-                        printf("*********[ THE AATS IS SHUTTING DOWN ]*********\n");
-                        printf("**************************************\n");
-
-                        for (coor_y = 0; coor_y < rows; coor_y++) {
-                                ptr = (unsigned long*)pfbmap + (screen_width * coor_y);
-                                for (coor_x = 0; coor_x < cols; coor_x++)
-                                        *ptr++ = 0x0000000;
-                        }
-
-                        munmap(pfbmap, mem_size);
-                        close(fbfd);
-                        exit(-1);
-                }
+                munmap(pfbmap, mem_size);
+                close(fbfd);
+                exit(-1);
+            }
         }
         munmap(pfbmap, mem_size);
         close(fbfd);
