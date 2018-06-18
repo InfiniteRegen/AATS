@@ -96,7 +96,7 @@ fb_err:
 	return;
 }
 
-static void DrawFromRGB565(unsigned char *displayFrame, unsigned char *videoFrame,int videoWidth, int videoHeight,int dFrameWidth,int dFrameHeight, unsigned short saveFlag)
+static void DrawFromRGB565(unsigned char *displayFrame, unsigned char *videoFrame, int videoWidth, int videoHeight, int dFrameWidth, int dFrameHeight, unsigned short saveFlag)
 {
 	int x, y;
 	int lineLeng;

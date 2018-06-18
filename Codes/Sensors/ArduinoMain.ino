@@ -1,8 +1,8 @@
 #include <Servo.h>
 
-#define ULTRA_MAX_CM      100
-#define CHANGE_RANGE      5
-#define SHOOTING_RANGE    17
+#define ULTRA_MAX_CM            100
+#define CHANGE_RANGE            5
+#define SHOOTING_RANGE          17
 #define DIRECT_SHOOTING_RANGE   8
 
 /*==[ Degree of each Sensor ]==*/

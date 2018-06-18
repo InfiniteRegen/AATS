@@ -112,13 +112,12 @@ void *TabletTouchHandler(void *param)
 	eventnum = 2;
 	sprintf(eventFullPathName, "%s%d", EVENT_STR, eventnum);
 
-	fp = open(eventFullPathName, O_RDONLY);
-	if (-1 == fp) {
+	if ((fp = open(eventFullPathName, O_RDONLY)) == -1) {
 		printf("%s open fail\n", eventFullPathName);
 		return;
 	}
 
-    if (access(FBDEV_FILE, F_OK) ) {
+    if (access(FBDEV_FILE, F_OK)) {
         printf("%s: access error\n", FBDEV_FILE);
 		close(fp);
         return;
