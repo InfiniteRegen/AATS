@@ -4,9 +4,11 @@
 #define OLED_SUPRESSION_PATH	"./OLED/sup.img"
 #define OLED_THREAT_PATH		"./OLED/threat.img"
 
+#define MAX_CURRENT_SOCK		20
+
 int main(int argc, char** argv)
 {
-	int threadRet;
+	int pthreadReturn;
 
 	pthread_t backgroundThread;
 
@@ -16,7 +18,7 @@ int main(int argc, char** argv)
 	pthread_t CameraThread;
 	CameraData_t *camData;
 
-	pthread_t socketThread[20];
+	pthread_t socketThread[MAX_CURRENT_SOCK];
 	eventInfo_t *sockSend;
 
 	pthread_t countThread;
@@ -39,7 +41,6 @@ int main(int argc, char** argv)
 
 	int sockIndex = 0;
 	int iFileIndex;
-	char fileIndex[5];
 	char fileName[MAX_FILE_NAME];
 	KILLSIG = FALSE; // received from android.
 
@@ -48,9 +49,9 @@ int main(int argc, char** argv)
 	MAXSOCKTHREAD = 5;
 
 	touchParam = (touch_t *)malloc(sizeof(touch_t));
-	threadRet = pthread_create(&touchThread, NULL, TabletTouchHandler, touchParam);
+	pthreadReturn = pthread_create(&touchThread, NULL, TabletTouchHandler, touchParam);
 
-	if (threadRet < 0) {
+	if (pthreadReturn < 0) {
 		printf("Failed to create Touch Thread!!\n");
 		exit(-1);
 	}
@@ -69,16 +70,16 @@ int main(int argc, char** argv)
 
 	/* Arduino <-[data]-> Embedded Board */
 	sensorData = (ArduCon_t *)malloc(sizeof(ArduCon_t));
-	threadRet = pthread_create(&ArduConThread, NULL, ArduinoHandler, sensorData); // Arduino Connection Thread.
-	if (threadRet < 0) {
+	pthreadReturn = pthread_create(&ArduConThread, NULL, ArduinoHandler, sensorData); // Arduino Connection Thread.
+	if (pthreadReturn < 0) {
 		printf("Failed to create ArduinoHandler Thread!!\n");
 		exit(-1);
 	}
 
 	/* Real-time security camera */
 	camData = (CameraData_t *)malloc(sizeof(CameraData_t));
-	threadRet = pthread_create(&CameraThread, NULL, CameraHandler, camData);
-	if (threadRet < 0) {
+	pthreadReturn = pthread_create(&CameraThread, NULL, CameraHandler, camData);
+	if (pthreadReturn < 0) {
 		printf("Failed to create Camera Thread!!\n");
 		exit(-1);
 	}
@@ -87,8 +88,8 @@ int main(int argc, char** argv)
 	countParam = (dotMatrixHandler_t *)malloc(sizeof(dotMatrixHandler_t));
 	countParam->countNum = 11; // sec
 
-	threadRet = pthread_create(&AndroidThread, NULL, AndroidHandler, NULL);
-	if (threadRet < 0) {
+	pthreadReturn = pthread_create(&AndroidThread, NULL, AndroidHandler, NULL);
+	if (pthreadReturn < 0) {
 		printf("Failed to create Touch Thread!!\n");
 		exit(-1);
 	}
@@ -96,8 +97,8 @@ int main(int argc, char** argv)
 
 	/* Init BusLED */
 	busParam = (bus_t *)malloc(sizeof(bus_t));
-	threadRet = pthread_create(&busThread, NULL, DisplayBusLED, busParam);
-	if (threadRet < 0) {
+	pthreadReturn = pthread_create(&busThread, NULL, DisplayBusLED, busParam);
+	if (pthreadReturn < 0) {
 		printf("Failed to create busLED !!\n");
 		exit(-1);
 	}
@@ -125,31 +126,27 @@ int main(int argc, char** argv)
 
 		if (sensorData->avail == TRUE ) {
 
-			sensorData->avail = 0;
+			sensorData->avail = FALSE;
 			DisplayTLCD(1);
 			printf("Sensor Num: %d <==> Distance: %d\n", sensorData->sensorNum, sensorData->distance);
 			busParam->distance = sensorData->sensorNum;
 			countParam->distance = sensorData->distance;
 			/* Define a camera capture event */
 			printf("saving a file..... \n");
-			camData->saveFlag = 1;
+			camData->saveFlag = TRUE;
 
 			time(&cur_time);
 			cur_tm = localtime(&cur_time);
 			sockSend = (eventInfo_t *)malloc(sizeof(eventInfo_t));
-
-			strcpy(sockSend->fileName, "capture");
-			sprintf(fileIndex, "%d", iFileIndex++);
-			strcat(sockSend->fileName, fileIndex);
-			strcat(sockSend->fileName, ".bmp");
+			sprintf(sockSend->fileName, "%s%d%s", "capture", ++iFileIndex, ".bmp");
 
 			sockSend->cur_time = cur_tm;
 			sockSend->sensorNum = sensorData->sensorNum;
 			sockSend->distance = sensorData->distance;
 
 			sockIndex = sockIndex % 20;
-			threadRet = pthread_create(&socketThread[sockIndex++], NULL, SendImage, sockSend);
-			if (threadRet < 0) {
+			pthreadReturn = pthread_create(&socketThread[sockIndex++], NULL, SendImage, sockSend);
+			if (pthreadReturn < 0) {
 				printf("Failed to Create SOCKET Thread!!\n");
 				exit(-1);
 			}
@@ -158,15 +155,15 @@ int main(int argc, char** argv)
 
 				countParam->countNum = 11;
 				countParam->countFlag = 1;
-				threadRet = pthread_create(&countThread, NULL, DotMatrixHandler, countParam);
+				pthreadReturn = pthread_create(&countThread, NULL, DotMatrixHandler, countParam);
 
-				if (threadRet < 0) {
+				if (pthreadReturn < 0) {
 					printf("Failed to create thread: CountThread()\n");
 					exit(-1);
 				}
 
-				threadRet = pthread_create(&secInfoThread, NULL, DoCountingDown, countParam);
-				if (threadRet < 0) {
+				pthreadReturn = pthread_create(&secInfoThread, NULL, DoCountingDown, countParam);
+				if (pthreadReturn < 0) {
 					printf("Failed to create thread: DoCountingDown()\n");
 					exit(-1);
 				}
